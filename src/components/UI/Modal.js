@@ -20,6 +20,7 @@ const portalElement = document.getElementById("overlays");
 const Modal = (props) => {
   return (
     <>
+      {/* Using ReactDOM.createPortal() to render the Backdrop component outside its parent DOM hierarchy */}
       {ReactDOM.createPortal(
         <Backdrop onClose={props.onClose} />,
         portalElement

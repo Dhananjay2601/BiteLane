@@ -6,7 +6,9 @@ const defaultCartState = {
   totalAmount: 0,
 };
 
+// Reducer function to manage cart state based on actions
 const cartReducer = (state, action) => {
+  // When an item is added to the cart
   if (action.type === "ADD_ITEM") {
     const updatedTotalAmount =
       state.totalAmount + action.item.price * action.item.amount;
@@ -42,6 +44,8 @@ const cartReducer = (state, action) => {
       totalAmount: updatedTotalAmount,
     };
   }
+
+  // When an item is removed from the cart
   if (action.type === "REMOVE_ITEM") {
     //check if that item already exits in cart by finding it using index in that array
     const existingCartItemIndex = state.items.findIndex(
@@ -74,10 +78,13 @@ const cartReducer = (state, action) => {
       totalAmount: updatedTotalAmount,
     };
   }
+  // Return the default state if no matching action is found
   return defaultCartState;
 };
 
+// CartProvider component to manage cart state and provide context
 const CartProvider = (props) => {
+  // Use useReducer hook to manage cart state with cartReducer function
   const [cartState, dispatchCartAction] = useReducer(
     cartReducer,
     defaultCartState
@@ -91,12 +98,14 @@ const CartProvider = (props) => {
     dispatchCartAction({ type: "REMOVE_ITEM", id: id });
   };
 
+  // Context object with cart state and handler functions
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
   };
+  // Provide cartContext to its children components using CartContext.Provider
   return (
     <CartContext.Provider value={cartContext}>
       {props.children}
